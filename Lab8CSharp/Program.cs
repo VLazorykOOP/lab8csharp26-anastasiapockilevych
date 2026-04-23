@@ -84,53 +84,57 @@ namespace Lab8CSharp
         }
     }
 
-    class Task3_14
-    {
-        private readonly string _basePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lab8CSharp");
+  class Task3_14
+  {
+      private readonly string _basePath = Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lab8CSharp");
 
-        public void Run()
-        {
-            Console.WriteLine("\n=== ЗАВДАННЯ 3.14: Вставка тексту після кожного входження слова ===");
-            Directory.CreateDirectory(_basePath);
+      public void Run()
+      {
+          Console.WriteLine("\n=== ЗАВДАННЯ 3.14: Вставка другого тексту після кожного входження слова ===");
+          Directory.CreateDirectory(_basePath);
 
-            string inputFile = Path.Combine(_basePath, "input3_14.txt");
-            string outputFile = Path.Combine(_basePath, "output3_14.txt");
+          string inputFile1 = Path.Combine(_basePath, "input3_14_text1.txt");
+          string inputFile2 = Path.Combine(_basePath, "input3_14_text2.txt");
+          string outputFile = Path.Combine(_basePath, "output3_14.txt");
 
-            if (!File.Exists(inputFile))
-                File.WriteAllText(inputFile,
-                    "Це текст. Слово тут. Ще слово.",
-                    Encoding.UTF8);
+          if (!File.Exists(inputFile1))
+              File.WriteAllText(inputFile1,
+                  "Це текст. Слово тут. Ще слово і знову слово.",
+                  Encoding.UTF8);
 
-            string text1 = File.ReadAllText(inputFile, Encoding.UTF8);
+          if (!File.Exists(inputFile2))
+              File.WriteAllText(inputFile2,
+                  "<<<ДРУГИЙ ТЕКСТ>>>",
+                  Encoding.UTF8);
 
-            string text2 = " [ВСТАВЛЕНО] ";
+          string text1 = File.ReadAllText(inputFile1, Encoding.UTF8);
+          string text2 = File.ReadAllText(inputFile2, Encoding.UTF8);
 
-            Console.Write("Введіть слово для пошуку: ");
-            string word = Console.ReadLine()?.Trim();
-            if (string.IsNullOrEmpty(word))
-            {
-                Console.WriteLine("✗ Слово не введено");
-                return;
-            }
+          Console.WriteLine($"Перший текст:  {text1}");
+          Console.WriteLine($"Другий текст:  {text2}");
 
-            string pattern = $@"\b{Regex.Escape(word)}\b";
+          Console.Write("Введіть слово для пошуку: ");
+          string word = Console.ReadLine()?.Trim();
+          if (string.IsNullOrEmpty(word))
+          {
+              Console.WriteLine("✗ Слово не введено");
+              return;
+          }
 
-            int count = Regex.Matches(text1, pattern, RegexOptions.IgnoreCase).Count;
-            Console.WriteLine($" Знайдено входжень слова \"{word}\": {count}");
+          string pattern = $@"\b{Regex.Escape(word)}\b";
 
-            string result = Regex.Replace(text1, pattern,
-                m => m.Value + text2,
-                RegexOptions.IgnoreCase);
+          string result = Regex.Replace(text1, pattern,
+              m => m.Value + " " + text2,
+              RegexOptions.IgnoreCase);
 
-            using (StreamWriter writer = new StreamWriter(outputFile, false, Encoding.UTF8))
-                writer.Write(result);
+          using (StreamWriter writer = new StreamWriter(outputFile, false, Encoding.UTF8))
+              writer.Write(result);
 
-            Console.WriteLine($" Результат: {result}");
-            Console.WriteLine($" Записано у: {outputFile}");
-        }
-    }
-
+          Console.WriteLine($"✓ Результат: {result}");
+          Console.WriteLine($"✓ Записано у: {outputFile}");
+      }
+  }
     class Task4_14
     {
         private readonly string _basePath = Path.Combine(
